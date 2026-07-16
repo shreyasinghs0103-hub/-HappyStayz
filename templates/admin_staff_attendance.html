@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ staff.name }} — Attendance{% endblock %}
+{% block content %}
+<h4 class="mb-1">{{ staff.name }}</h4>
+<p class="text-muted">{{ staff.role }} — {{ staff.department }}</p>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title mb-3">Attendance — Last 30 Days</h5>
+    <table class="table table-sm">
+      <thead><tr><th>Date</th><th>Check In</th><th>Check Out</th><th>Hours</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for r in records %}
+        <tr>
+          <td>{{ r.work_date }}</td>
+          <td>{{ r.check_in_time.split(' ')[1] if r.check_in_time else '-' }}</td>
+          <td>{{ r.check_out_time.split(' ')[1] if r.check_out_time else '-' }}</td>
+          <td>{{ r.hours_worked }}</td>
+          <td><span class="badge bg-{{ 'success' if r.status=='present' else ('secondary' if r.status=='absent' else 'warning') }}">{{ r.status }}</span></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<a href="{{ url_for('admin_staff') }}" class="btn btn-outline-secondary mt-3">Back to Staff List</a>
+{% endblock %}

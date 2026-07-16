@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Payroll — HappyStayz Admin{% endblock %}
+{% block content %}
+<h4 class="mb-4"><i class="bi bi-cash-coin"></i> Payroll & Autopay</h4>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <form method="GET" class="row g-2 align-items-end mb-3">
+      <div class="col-auto">
+        <label class="form-label">Period</label>
+        <input type="month" class="form-control" name="period_month" value="{{ period }}">
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary" type="submit">View</button>
+      </div>
+    </form>
+    <form method="POST">
+      <input type="hidden" name="period_month" value="{{ period }}">
+      <button type="submit" class="btn btn-success">
+        <i class="bi bi-lightning-charge"></i> Run Autopay Now for {{ period }}
+      </button>
+      <span class="text-muted small ms-2">Calculates salary from attendance & auto-disburses to staff with autopay enabled. Runs automatically on the 1st of each month.</span>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title mb-3">Payroll for {{ period }} — Total Disbursed: ₹{{ '%.2f'|format(total_paid) }}</h5>
+    <div class="table-responsive">
+    <table class="table table-sm">
+      <thead><tr><th>Staff</th><th>Department</th><th>Days Present</th><th>Hours</th><th>Gross</th><th>Deductions</th><th>Net</th><th>Status</th><th>Txn Ref</th></tr></thead>
+      <tbody>
+      {% for p in payroll_rows %}
+        <tr>
+          <td>{{ p.name }}</td>
+          <td>{{ p.department }}</td>
+          <td>{{ p.days_present }}</td>
+          <td>{{ p.total_hours }}</td>
+          <td>₹{{ '%.2f'|format(p.gross_amount) }}</td>
+          <td>₹{{ '%.2f'|format(p.deductions) }}</td>
+          <td>₹{{ '%.2f'|format(p.net_amount) }}</td>
+          <td><span class="badge bg-{{ 'success' if p.status=='paid' else 'secondary' }}">{{ p.status }}</span></td>
+          <td><small>{{ p.transaction_ref or '-' }}</small></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="9" class="text-muted">No payroll run yet for this period. Click "Run Autopay Now" above.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

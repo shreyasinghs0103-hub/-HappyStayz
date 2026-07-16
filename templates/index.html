@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}HappyStayz — Home{% endblock %}
+{% block content %}
+<div class="hsz-hero rounded-4 p-5 mb-5 text-white">
+  <h1 class="display-5 fw-bold">Welcome to HappyStayz</h1>
+  <p class="lead">A smart hotel — self check-in, real-time staff attendance, and automatic payroll, all in one system.</p>
+  <div class="mt-4">
+    <a href="{{ url_for('guest_book') }}" class="btn btn-light btn-lg me-2">Book a Room</a>
+    <a href="{{ url_for('guest_checkin') }}" class="btn btn-outline-light btn-lg">Self Check-In</a>
+  </div>
+</div>
+
+<h3 class="mb-3">Available Room Types</h3>
+<div class="row g-4">
+  {% for rt in room_types %}
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ rt.room_type }}</h5>
+        <p class="card-text text-muted">{{ rt.cnt }} rooms available</p>
+        <p class="fs-4 fw-bold">₹{{ '%.0f'|format(rt.price) }} <small class="fs-6 text-muted">/ night</small></p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="row mt-5 g-4">
+  <div class="col-md-4">
+    <div class="p-4 border rounded-4 h-100">
+      <i class="bi bi-phone fs-1 text-primary"></i>
+      <h5 class="mt-2">Self Check-In</h5>
+      <p class="text-muted">Guests check themselves in with a booking code and get an instant digital room key.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="p-4 border rounded-4 h-100">
+      <i class="bi bi-clock-history fs-1 text-primary"></i>
+      <h5 class="mt-2">Smart Staff Attendance</h5>
+      <p class="text-muted">Staff clock in/out from their own dashboard; hours are tracked automatically.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="p-4 border rounded-4 h-100">
+      <i class="bi bi-cash-coin fs-1 text-primary"></i>
+      <h5 class="mt-2">Automatic Payroll (Autopay)</h5>
+      <p class="text-muted">Salaries are calculated from attendance and disbursed automatically every month.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

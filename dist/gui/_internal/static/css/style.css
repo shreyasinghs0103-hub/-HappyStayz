@@ -1,0 +1,39 @@
+:root {
+  --hsz-primary: #0b5f6c;
+  --hsz-accent: #f2994a;
+}
+
+body {
+  background-color: #f7f9fa;
+}
+
+.hsz-nav {
+  background-color: var(--hsz-primary);
+}
+
+.hsz-hero {
+  background: linear-gradient(135deg, #0b5f6c 0%, #14898f 100%);
+}
+
+.hsz-footer {
+  border-top: 1px solid #e2e2e2;
+  font-size: 0.9rem;
+}
+
+.card {
+  border: none;
+  border-radius: 0.75rem;
+}
+
+.btn-primary {
+  background-color: var(--hsz-primary);
+  border-color: var(--hsz-primary);
+}
+.btn-primary:hover {
+  background-color: #094e59;
+  border-color: #094e59;
+}
+
+.navbar-brand, .nav-link {
+  font-weight: 500;
+}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Bookings — HappyStayz Admin{% endblock %}
+{% block content %}
+<h4 class="mb-4"><i class="bi bi-journal-bookmark"></i> All Bookings</h4>
+
+<div class="mb-3">
+  <a href="{{ url_for('admin_bookings') }}" class="btn btn-sm btn-outline-secondary {{ 'active' if not status_filter }}">All</a>
+  <a href="{{ url_for('admin_bookings', status='confirmed') }}" class="btn btn-sm btn-outline-secondary {{ 'active' if status_filter=='confirmed' }}">Confirmed</a>
+  <a href="{{ url_for('admin_bookings', status='checked_in') }}" class="btn btn-sm btn-outline-secondary {{ 'active' if status_filter=='checked_in' }}">Checked In</a>
+  <a href="{{ url_for('admin_bookings', status='checked_out') }}" class="btn btn-sm btn-outline-secondary {{ 'active' if status_filter=='checked_out' }}">Checked Out</a>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="table-responsive">
+    <table class="table table-sm table-hover">
+      <thead><tr><th>Code</th><th>Guest</th><th>Room</th><th>Check-In</th><th>Check-Out</th><th>Amount</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for b in bookings %}
+        <tr>
+          <td>{{ b.booking_code }}</td>
+          <td>{{ b.guest_name }}<br><small class="text-muted">{{ b.guest_email }}</small></td>
+          <td>{{ b.room_number or b.room_type_requested }}</td>
+          <td>{{ b.check_in_date }}</td>
+          <td>{{ b.check_out_date }}</td>
+          <td>₹{{ '%.2f'|format(b.total_amount) }}</td>
+          <td><span class="badge bg-secondary">{{ b.status }}</span></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

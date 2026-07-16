@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Staff Dashboard — HappyStayz{% endblock %}
+{% block content %}
+<h4 class="mb-1">Welcome, {{ staff.name }}</h4>
+<p class="text-muted">{{ staff.role }} — {{ staff.department }} Department</p>
+
+<div class="row g-4 mt-2">
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <h5 class="card-title mb-3">Today's Attendance ({{ today }})</h5>
+        {% if today_row %}
+          <p>Checked in at: <strong>{{ today_row.check_in_time.split(' ')[1] if today_row.check_in_time else '-' }}</strong></p>
+          <p>Checked out at: <strong>{{ today_row.check_out_time.split(' ')[1] if today_row.check_out_time else '-' }}</strong></p>
+          <p>Status: <span class="badge bg-{{ 'success' if today_row.status=='present' else 'warning' }}">{{ today_row.status }}</span></p>
+        {% else %}
+          <p class="text-muted">You haven't checked in today.</p>
+        {% endif %}
+        <form method="POST" class="d-grid gap-2 mt-3">
+          <button type="submit" name="action" value="check_in" class="btn btn-success"
+            {% if today_row and today_row.check_in_time %}disabled{% endif %}>
+            <i class="bi bi-box-arrow-in-right"></i> Check In
+          </button>
+          <button type="submit" name="action" value="check_out" class="btn btn-outline-danger"
+            {% if not today_row or not today_row.check_in_time or today_row.check_out_time %}disabled{% endif %}>
+            <i class="bi bi-box-arrow-right"></i> Check Out
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Attendance History (last 14 days)</h5>
+        <table class="table table-sm">
+          <thead><tr><th>Date</th><th>Check In</th><th>Check Out</th><th>Hours</th><th>Status</th></tr></thead>
+          <tbody>
+          {% for h in history %}
+            <tr>
+              <td>{{ h.work_date }}</td>
+              <td>{{ h.check_in_time.split(' ')[1] if h.check_in_time else '-' }}</td>
+              <td>{{ h.check_out_time.split(' ')[1] if h.check_out_time else '-' }}</td>
+              <td>{{ h.hours_worked }}</td>
+              <td><span class="badge bg-{{ 'success' if h.status=='present' else ('secondary' if h.status=='absent' else 'warning') }}">{{ h.status }}</span></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm mt-4">
+  <div class="card-body">
+    <h5 class="card-title mb-3"><i class="bi bi-cash-stack"></i> Salary / Payroll History</h5>
+    <table class="table table-sm">
+      <thead><tr><th>Month</th><th>Days Present</th><th>Hours</th><th>Gross</th><th>Deductions</th><th>Net Paid</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for p in payroll_history %}
+        <tr>
+          <td>{{ p.period_month }}</td>
+          <td>{{ p.days_present }}</td>
+          <td>{{ p.total_hours }}</td>
+          <td>₹{{ '%.2f'|format(p.gross_amount) }}</td>
+          <td>₹{{ '%.2f'|format(p.deductions) }}</td>
+          <td>₹{{ '%.2f'|format(p.net_amount) }}</td>
+          <td><span class="badge bg-{{ 'success' if p.status=='paid' else 'secondary' }}">{{ p.status }}</span></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="7" class="text-muted">No payroll processed yet. Autopay runs monthly, or admin can trigger it manually.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p class="small text-muted">Salary bank account on file: {{ staff.bank_account }} — Autopay: {{ 'Enabled' if staff.autopay_enabled else 'Disabled' }}</p>
+  </div>
+</div>
+{% endblock %}

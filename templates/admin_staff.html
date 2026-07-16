@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Staff — HappyStayz Admin{% endblock %}
+{% block content %}
+<h4 class="mb-4"><i class="bi bi-people"></i> Staff & Today's Attendance ({{ today }})</h4>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="table-responsive">
+    <table class="table table-sm table-hover align-middle">
+      <thead>
+        <tr><th>Code</th><th>Name</th><th>Department</th><th>Role</th><th>Today</th><th>Autopay</th><th></th></tr>
+      </thead>
+      <tbody>
+      {% for s in staff_list %}
+        {% set a = attendance_today.get(s.id) %}
+        <tr>
+          <td>{{ s.staff_code }}</td>
+          <td>{{ s.name }}</td>
+          <td>{{ s.department }}</td>
+          <td>{{ s.role }}</td>
+          <td>
+            {% if a and a.check_in_time %}
+              <span class="badge bg-success">In {{ a.check_in_time.split(' ')[1] }}</span>
+              {% if a.check_out_time %}<span class="badge bg-secondary">Out {{ a.check_out_time.split(' ')[1] }}</span>{% endif %}
+            {% else %}
+              <span class="badge bg-danger">Not checked in</span>
+            {% endif %}
+          </td>
+          <td>
+            <form method="POST" action="{{ url_for('toggle_autopay', staff_id=s.id) }}">
+              <button class="btn btn-sm btn-{{ 'success' if s.autopay_enabled else 'outline-secondary' }}">
+                {{ 'ON' if s.autopay_enabled else 'OFF' }}
+              </button>
+            </form>
+          </td>
+          <td><a href="{{ url_for('admin_staff_attendance', staff_id=s.id) }}" class="btn btn-sm btn-outline-primary">History</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

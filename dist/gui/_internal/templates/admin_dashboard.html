@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — HappyStayz{% endblock %}
+{% block content %}
+<h4 class="mb-4"><i class="bi bi-speedometer2"></i> Admin Dashboard</h4>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3 col-6">
+    <div class="card text-center shadow-sm"><div class="card-body">
+      <h3>{{ stats.occupied_rooms }}/{{ stats.total_rooms }}</h3><p class="text-muted mb-0">Rooms Occupied</p>
+    </div></div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="card text-center shadow-sm"><div class="card-body">
+      <h3>{{ stats.total_bookings }}</h3><p class="text-muted mb-0">Total Bookings</p>
+    </div></div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="card text-center shadow-sm"><div class="card-body">
+      <h3>{{ stats.present_today }}/{{ stats.total_staff }}</h3><p class="text-muted mb-0">Staff Present Today</p>
+    </div></div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="card text-center shadow-sm"><div class="card-body">
+      <h3>₹{{ '%.0f'|format(stats.revenue) }}</h3><p class="text-muted mb-0">Total Revenue</p>
+    </div></div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-4">
+    <a href="{{ url_for('admin_bookings') }}" class="text-decoration-none">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <i class="bi bi-journal-bookmark fs-2 text-primary"></i>
+        <h5 class="mt-2">Manage Bookings</h5>
+        <p class="text-muted">View all reservations & check-in status.</p>
+      </div></div>
+    </a>
+  </div>
+  <div class="col-md-4">
+    <a href="{{ url_for('admin_staff') }}" class="text-decoration-none">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <i class="bi bi-people fs-2 text-primary"></i>
+        <h5 class="mt-2">Staff & Attendance</h5>
+        <p class="text-muted">Track staff attendance in real time.</p>
+      </div></div>
+    </a>
+  </div>
+  <div class="col-md-4">
+    <a href="{{ url_for('admin_payroll') }}" class="text-decoration-none">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <i class="bi bi-cash-coin fs-2 text-primary"></i>
+        <h5 class="mt-2">Payroll / Autopay</h5>
+        <p class="text-muted">Run and review automatic salary disbursement.</p>
+      </div></div>
+    </a>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title">Recent Bookings</h5>
+    <table class="table table-sm">
+      <thead><tr><th>Code</th><th>Guest</th><th>Room</th><th>Check-In</th><th>Check-Out</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for b in recent_bookings %}
+        <tr>
+          <td>{{ b.booking_code }}</td><td>{{ b.guest_name }}</td><td>{{ b.room_number or '-' }}</td>
+          <td>{{ b.check_in_date }}</td><td>{{ b.check_out_date }}</td>
+          <td><span class="badge bg-secondary">{{ b.status }}</span></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

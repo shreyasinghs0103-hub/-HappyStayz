@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Admin Login — HappyStayz{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h4 class="mb-4"><i class="bi bi-shield-lock"></i> Admin Login</h4>
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-dark w-100">Login</button>
+        </form>
+        <p class="text-muted small mt-3">Demo admin: username <code>admin</code>, password <code>admin123</code></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
